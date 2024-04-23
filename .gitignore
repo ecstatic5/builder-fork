@@ -1,0 +1,9 @@
+# Project place file
+/Builder.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+# Visual Studio Code files (for now)
+.vscode/

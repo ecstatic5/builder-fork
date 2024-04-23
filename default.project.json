@@ -1,0 +1,11 @@
+{
+  "name": "Builder",
+  "tree": {
+    "$className": "DataModel",
+    "ServerScriptService": {
+      "BuilderPlugin" : {
+        "$path": "src/"
+      }
+    }
+  }
+}
