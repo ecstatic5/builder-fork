@@ -1,0 +1,7 @@
+{
+  "editor.tabSize": 4,
+  "[lua]": {
+    "editor.defaultFormatter": "JohnnyMorganz.stylua",
+    "editor.formatOnSave": true
+  }
+}
