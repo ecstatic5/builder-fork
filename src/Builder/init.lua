@@ -90,7 +90,7 @@ end
 
 ---This sets an active selection that we will use on different actions
 ---@param selection BasePart | Model
-function Builder:SetActiveSelection(selection: BasePart | Model): ()
+function Builder:SetActiveSelection(selection: BasePart | Model)
 	if not self.settings.selection.enabled then
 		return
 	end
