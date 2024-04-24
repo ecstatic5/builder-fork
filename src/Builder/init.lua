@@ -62,6 +62,14 @@ function Builder:Resize(resizeFactor: number)
 	Basics.Resize(self.selectedInstance, Vector3.new(0, 0, 1) * resizeFactor, true)
 end
 
+function Builder:Move(moveFactor: number)
+	if not self.selectedInstance or not self.isSelected then
+		return
+	end
+
+	Basics.Move(self.selectedInstance, Vector3.new(0, 0, 1) * moveFactor)
+end
+
 ---Binds a function that will be called when a BasePart/Model is selected!
 ---@param fn function
 ---@return nil
