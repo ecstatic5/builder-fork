@@ -27,6 +27,8 @@ function Basics.Resize(toResize: BasePart | Model, resizeVector: Vector3, fixedP
 
 		return
 	end
+
+	-- TODO: Make models work
 end
 
 function Basics.Rotate() end

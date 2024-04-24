@@ -41,16 +41,14 @@ function Builder:_OnSelection(deselection: boolean): ()
 end
 
 function Builder.Init(settings: { [string]: any }?)
-	print("Initialized Builder plugin!") -- DEBUG
-
 	local self = {}
-	
+
 	self.activeSelection = nil
 	self._onSelectFn = nil
 	self.settings = DefaultSettings
 	print(self.settings, DefaultSettings)
 
-	Decorators = Decorators.Init(script.Parent:FindFirstChild("Decorators"))
+	Decorators = Decorators.Init(workspace.Terrain) -- TESTING
 
 	setmetatable(self, Builder)
 

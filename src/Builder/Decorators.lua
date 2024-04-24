@@ -32,7 +32,7 @@ function Decorators:_CreateSelectionBox(properties: { [string]: any })
 end
 
 function Decorators:_FindDecoratorForInstance(findFor: BasePart | Model, type: string): Instance?
-	for _, decorator in self.decoratorsFolder:GetChildren() do
+	for _, decorator in self.decorators:GetChildren() do
 		if not decorator:IsA(type) then
 			continue
 		end
@@ -45,9 +45,9 @@ function Decorators:_FindDecoratorForInstance(findFor: BasePart | Model, type: s
 	return nil
 end
 
-function Decorators.Init(decoratorsFolder: Folder, settings: { [string]: any })
+function Decorators.Init(decorators: Instance, settings: { [string]: any })
 	local self = {}
-	self.decoratorsFolder = decoratorsFolder
+	self.decorators = decorators
 	self.settings = {}
 
 	setmetatable(self, Decorators)
@@ -60,7 +60,7 @@ function Decorators:ToggleHighlight(toHighlight: BasePart | Model)
 	local highlight: Highlight? = self:_FindDecoratorForInstance(toHighlight, "Highlight")
 
 	if highlight then
-		highlight.Enabled = false
+		highlight.Enabled = not highlight.Enabled
 
 		return
 	end
@@ -74,7 +74,7 @@ function Decorators:ToggleSelectionBox(toSetBox: BasePart | Model)
 	local selectionBox: SelectionBox? = self:_FindDecoratorForInstance(toSetBox, "SelectionBox")
 
 	if selectionBox then
-		selectionBox.Visible = false
+		selectionBox.Visible = not selectionBox.Visible
 
 		return
 	end
