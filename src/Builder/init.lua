@@ -21,6 +21,8 @@ function Builder:_OnSelection(deselection: boolean): ()
 		task.spawn(self._onSelectFn, self.selectedInstance, deselection)
 	end
 
+	self.isSelected = not deselection
+
 	-- Before applying everything
 	if not self:_SettingsExists() then
 		return
@@ -40,6 +42,7 @@ function Builder.Init(settings: { [string]: any }?)
 	local self = {}
 
 	self.selectedInstance = nil
+	self.isSelected = false
 	self._onSelectFn = nil
 	self.settings = DefaultSettings
 	print(self.settings, DefaultSettings)
@@ -53,6 +56,10 @@ end
 
 function Builder:Resize(resizeFactor: number)
 	if not self.selectedInstance then
+		return
+	end
+
+	if not self.isSelected then
 		return
 	end
 
@@ -97,11 +104,30 @@ function Builder:SetSelection(selection: BasePart | Model): ()
 
 	assert(
 		selection:IsA("BasePart") or selection:IsA("Model"),
-		Errors.UNABLE_TO_SET_ACTIVE_SELECTION_ERROR:format("Selection is not a BasePart or a Model")
+		Errors.UNABLE_TO_SET_SELECTION_INSTANCE_ERROR:format(
+			"Selection is not a BasePart or a Model"
+		)
 	)
 
+	if self.selectedInstance and self.selectedInstance ~= selection then
+		-- Deselect current one and select the new one
+		self:_OnSelection(true)
+
+		self.selectedInstance = selection -- Apply new one
+		self:_OnSelection(false)
+
+		return
+	elseif self.selectedInstance and self.selectedInstance == selection then
+		-- Deselection
+		self:_OnSelection(true)
+		self.selectedInstance = nil
+
+		return
+	end
+
+	-- Normal selection
 	self.selectedInstance = selection
-	self:_OnSelection()
+	self:_OnSelection(false)
 end
 
 return Builder
