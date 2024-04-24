@@ -30,7 +30,7 @@ Builder:BindOnSelect(function(object, isDeselected)
 end)
 
 task.spawn(function()
-	while task.wait(0.05) do
+	while task.wait(0.01) do
 		if
 			UserInputService:IsKeyDown(Enum.KeyCode.LeftAlt)
 			and UserInputService:IsKeyDown(Enum.KeyCode.Up)

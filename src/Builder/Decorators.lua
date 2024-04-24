@@ -1,30 +1,32 @@
+-- Modules --
+local ChecksAndAsserts = require(script.Parent.ChecksAndAsserts)
+-- Decorators --
 local Decorators = {}
 Decorators.__index = Decorators
 
 local Errors = {
-	NilSettings = "Settings argument is nil or doesn't exist!",
-	SettingsAreNotATable = "Settings is not a table instead is a '%s'",
+	NilProperties = "Properties argument is nil or doesn't exist!",
+	PropertiesAreNotA = "Properties argument is a '%s'! Expected to be a '%s'",
 }
 
-function Decorators:_CreateHighlight(settings: { [string]: any })
-	assert(settings, Errors.NilSettings)
-	assert(typeof(settings) == "table", Errors.SettingsAreNotATable:format(typeof(settings)))
+function Decorators:_CreateHighlight(properties: { [string]: any })
+	ChecksAndAsserts:AssertType(properties, "table", Errors.PropertiesAreNotA)
 
 	local highlight = Instance.new("Highlight")
 	highlight.Parent = workspace.Terrain
 	-- For now i will be saving decorators in the Terrain since
 	-- i dont have anything else to save them
-	highlight.Adornee = settings.applyTo
+	highlight.Adornee = properties.applyTo
 
 	return highlight
 end
 
-function Decorators:_CreateSelectionBox(settings: { [string]: any })
+function Decorators:_CreateSelectionBox(properties: { [string]: any })
 	local selectionBox = Instance.new("SelectionBox")
 
 	selectionBox.Parent = workspace.Terrain
-	selectionBox.Adornee = settings.applyTo
-	selectionBox.LineThickness = settings.thickness
+	selectionBox.Adornee = properties.applyTo
+	selectionBox.LineThickness = properties.thickness
 
 	return selectionBox
 end
