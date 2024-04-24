@@ -4,8 +4,8 @@ local DefaultErrors = {
 	WrongExpectedTypeError = "Passed variable is a '%s'! Expected to be a '%s'",
 }
 
-function ChecksAndAsserts.AssertType(
-	var: any,
+function ChecksAndAsserts.AssertType<T>(
+	var: T,
 	expectedType: string,
 	wrongExpectedTypeError: string?,
 	variableNilError: string?
