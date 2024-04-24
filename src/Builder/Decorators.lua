@@ -4,13 +4,10 @@ local ChecksAndAsserts = require(script.Parent.ChecksAndAsserts)
 local Decorators = {}
 Decorators.__index = Decorators
 
-local Errors = {
-	NilProperties = "Properties argument is nil or doesn't exist!",
-	PropertiesAreNotA = "Properties argument is a '%s'! Expected to be a '%s'",
-}
+local Errors = require(script.Parent.Parent.Constants.Errors)
 
 function Decorators:_CreateHighlight(properties: { [string]: any })
-	ChecksAndAsserts:AssertType(properties, "table", Errors.PropertiesAreNotA)
+	ChecksAndAsserts:AssertType(properties, "table", Errors.PROPERTIES_ARE_NOT_A_ERROR)
 
 	local highlight = Instance.new("Highlight")
 	highlight.Parent = workspace.Terrain

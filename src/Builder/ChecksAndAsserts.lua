@@ -1,11 +1,9 @@
-local ChecksAndAsserts = {}
-local DefaultErrors = {
-	VarIsNil = "Passed variable is nil! Expected to be a '%s'",
-	WrongExpectedTypeError = "Passed variable is a '%s'! Expected to be a '%s'",
-}
+local Errors = require(script.Parent.Parent.Constants.Errors)
 
-function ChecksAndAsserts.AssertType(
-	var: any,
+local ChecksAndAsserts = {}
+
+function ChecksAndAsserts.AssertType<T>(
+	var: T,
 	expectedType: string,
 	wrongExpectedTypeError: string?,
 	variableNilError: string?
@@ -14,11 +12,10 @@ function ChecksAndAsserts.AssertType(
 		wrongExpectedTypeError = wrongExpectedTypeError:format(typeof(var), expectedType)
 	end
 
-	assert(var, variableNilError or DefaultErrors.VarIsNil:format(expectedType))
+	assert(var, variableNilError or Errors.VAR_IS_NIL_ERROR:format(expectedType))
 	assert(
 		typeof(var) == expectedType,
-		wrongExpectedTypeError
-			or DefaultErrors.WrongExpectedTypeError:format(typeof(var), expectedType)
+		wrongExpectedTypeError or Errors.WRONG_TYPE_ERROR:format(typeof(var), expectedType)
 	)
 end
 

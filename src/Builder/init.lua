@@ -1,11 +1,7 @@
 local Basics = require(script.Basics)
 local Decorators = require(script.Decorators)
 local DefaultSettings = require(script.Default.Settings)
-
-local Errors = {
-	UnableToSetActiveSelection = "Unable to set active selection: %s",
-	BindWrong = "Unable to bind function '%s': %s",
-}
+local Errors = require(script.Parent.Constants.Errors)
 
 local Builder = {}
 Builder.__index = Builder
@@ -67,10 +63,10 @@ end
 ---@param fn function
 ---@return nil
 function Builder:BindOnSelect(fn: (object: BasePart | Model, isDeselected: boolean) -> ())
-	assert(fn, Errors.BindWrong:format("OnSelect", "Function passed is nil!"))
+	assert(fn, Errors.BIND_WRONG_ERROR:format("OnSelect", "Function passed is nil!"))
 	assert(
 		typeof(fn) == "function",
-		Errors.BindWrong:format("OnSelect", "Function passed is not a function!")
+		Errors.BIND_WRONG_ERROR:format("OnSelect", "Function passed is not a function!")
 	)
 
 	self._onSelectFn = fn
@@ -101,7 +97,7 @@ function Builder:SetActiveSelection(selection: BasePart | Model): ()
 
 	assert(
 		selection:IsA("BasePart") or selection:IsA("Model"),
-		Errors.UnableToSetActiveSelection:format("Selection is not a BasePart or a Model")
+		Errors.UNABLE_TO_SET_ACTIVE_SELECTION_ERROR:format("Selection is not a BasePart or a Model")
 	)
 
 	self.activeSelection = selection
