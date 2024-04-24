@@ -101,7 +101,7 @@ end
 
 ---This sets a selection that we will use on different actions
 ---@param selection BasePart | Model
-function Builder:SetSelection(selection: BasePart | Model): ()
+function Builder:SetSelection(selection: BasePart | Model)
 	if not self.settings.selection.enabled then
 		return
 	end
