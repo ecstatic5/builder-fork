@@ -55,11 +55,7 @@ function Builder.Init(settings: { [string]: any }?)
 end
 
 function Builder:Resize(resizeFactor: number)
-	if not self.selectedInstance then
-		return
-	end
-
-	if not self.isSelected then
+	if not self.selectedInstance or not self.isSelected then
 		return
 	end
 
