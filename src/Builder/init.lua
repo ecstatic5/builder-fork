@@ -15,11 +15,13 @@ function Builder:_SettingsExists(): boolean
 end
 
 function Builder:_OnSelection(deselection: boolean): ()
-	print("New selection/deselection: " .. self.activeSelection.Name)
+	print("New selection/deselection: " .. self.selectedInstance.Name)
 
 	if self._onSelectFn then
-		task.spawn(self._onSelectFn, self.activeSelection, deselection)
+		task.spawn(self._onSelectFn, self.selectedInstance, deselection)
 	end
+
+	self.isSelected = not deselection
 
 	-- Before applying everything
 	if not self:_SettingsExists() then
@@ -28,18 +30,19 @@ function Builder:_OnSelection(deselection: boolean): ()
 
 	-- Apply selection decorators
 	if self.settings.selection.showHighlight then
-		Decorators:ToggleHighlight(self.activeSelection)
+		Decorators:ToggleHighlight(self.selectedInstance)
 	end
 
 	if self.settings.selection.showBox then
-		Decorators:ToggleSelectionBox(self.activeSelection)
+		Decorators:ToggleSelectionBox(self.selectedInstance)
 	end
 end
 
 function Builder.Init(settings: { [string]: any }?)
 	local self = {}
 
-	self.activeSelection = nil
+	self.selectedInstance = nil
+	self.isSelected = false
 	self._onSelectFn = nil
 	self.settings = DefaultSettings
 	print(self.settings, DefaultSettings)
@@ -52,11 +55,19 @@ function Builder.Init(settings: { [string]: any }?)
 end
 
 function Builder:Resize(resizeFactor: number)
-	if not self.activeSelection then
+	if not self.selectedInstance or not self.isSelected then
 		return
 	end
 
-	Basics.Resize(self.activeSelection, Vector3.new(0, 0, 1) * resizeFactor, true)
+	Basics.Resize(self.selectedInstance, Vector3.new(0, 0, 1) * resizeFactor, true)
+end
+
+function Builder:Move(moveFactor: number)
+	if not self.selectedInstance or not self.isSelected then
+		return
+	end
+
+	Basics.Move(self.selectedInstance, Vector3.new(0, 0, 1) * moveFactor)
 end
 
 ---Binds a function that will be called when a BasePart/Model is selected!
@@ -82,26 +93,45 @@ function Builder:GetSelectionFromMouse(mouse: PluginMouse): (BasePart | Model)?
 	end
 
 	if not selection:IsA("BasePart") or not selection:IsA("Model") then
-		self:SetActiveSelection(selection)
+		self:SetSelection(selection)
 	end
 
 	return selection
 end
 
----This sets an active selection that we will use on different actions
+---This sets a selection that we will use on different actions
 ---@param selection BasePart | Model
-function Builder:SetActiveSelection(selection: BasePart | Model)
+function Builder:SetSelection(selection: BasePart | Model): ()
 	if not self.settings.selection.enabled then
 		return
 	end
 
 	assert(
 		selection:IsA("BasePart") or selection:IsA("Model"),
-		Errors.UNABLE_TO_SET_ACTIVE_SELECTION_ERROR:format("Selection is not a BasePart or a Model")
+		Errors.UNABLE_TO_SET_SELECTION_INSTANCE_ERROR:format(
+			"Selection is not a BasePart or a Model"
+		)
 	)
 
-	self.activeSelection = selection
-	self:_OnSelection()
+	if self.selectedInstance and self.selectedInstance ~= selection then
+		-- Deselect current one and select the new one
+		self:_OnSelection(true)
+
+		self.selectedInstance = selection -- Apply new one
+		self:_OnSelection(false)
+
+		return
+	elseif self.selectedInstance and self.selectedInstance == selection then
+		-- Deselection
+		self:_OnSelection(true)
+		self.selectedInstance = nil
+
+		return
+	end
+
+	-- Normal selection
+	self.selectedInstance = selection
+	self:_OnSelection(false)
 end
 
 return Builder
