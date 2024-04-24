@@ -9,7 +9,10 @@ local Basics = {}
 
 function Basics.Resize(toResize: BasePart | Model, resizeVector: Vector3, fixedPosition: boolean?)
 	-- TODO: Make operator work as an Enum
-	assert(toResize, "Expected 'BasePart' or 'Model' for 'toResize' argument")
+	assert(
+		typeof(toResize) == "Instance" and (toResize:IsA("BasePart") or toResize:IsA("Model")),
+		"Expected 'toResize' datatype to be 'BasePart' or 'Model'"
+	)
 
 	if toResize:IsA("BasePart") then
 		toResize.Size += resizeVector
