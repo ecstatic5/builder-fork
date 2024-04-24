@@ -62,7 +62,7 @@ function Builder:Resize(resizeFactor: number)
 		return
 	end
 
-	Basics.Resize(self.activeSelection, 0, Vector3.new(0, 0, 1) * resizeFactor)
+	Basics.Resize(self.activeSelection, Vector3.new(0, 0, 1) * resizeFactor, true)
 end
 
 ---Binds a function that will be called when a BasePart/Model is selected!
