@@ -30,6 +30,19 @@ function Basics.Resize(toResize: BasePart | Model, resizeVector: Vector3, fixedP
 	-- TODO: Make models work
 end
 
+function Basics.Move(toMove: BasePart | Model, moveVector: Vector3)
+	assert(
+		typeof(toMove) == "Instance" and (toMove:IsA("BasePart") or toMove:IsA("Model")),
+		"Expected 'toMove' datatype to be 'BasePart' or 'Model'"
+	)
+
+	if toMove:IsA("BasePart") then
+		toMove.Position += moveVector
+
+		return
+	end
+end
+
 function Basics.Rotate() end
 
 return Basics
