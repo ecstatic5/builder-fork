@@ -45,7 +45,6 @@ function Builder.Init(settings: { [string]: any }?)
 	self.isSelected = false
 	self._onSelectFn = nil
 	self.settings = DefaultSettings
-	print(self.settings, DefaultSettings)
 
 	Decorators = Decorators.Init(workspace.Terrain) -- TESTING
 
